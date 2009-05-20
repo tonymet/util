@@ -1,0 +1,7 @@
+#!/usr/bin/php
+<?php
+print urlencode($_SERVER['argv'][1]);
+
+
+
+?>

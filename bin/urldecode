@@ -1,0 +1,6 @@
+#!/usr/bin/python
+from urllib import unquote
+import sys
+for line in sys.stdin.xreadlines():
+    line = line.strip();
+    print unquote(line),
