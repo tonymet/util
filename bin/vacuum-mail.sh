@@ -1,6 +1,8 @@
 #!/bin/bash
 SQLITE=/usr/bin/sqlite3
 db="$HOME/Library/Mail/Envelope Index"
+echo -n "Index size before vacuum: " 
+du -sh "$db"
 if test ! -f "$db"  ;then
 	echo "$db doesn't exist"
 	exit 255;
@@ -17,3 +19,5 @@ for t in $tables;do
 	$SQLITE "$db" "vacuum $t"
 	echo "Done"
 done
+echo -n "Index size after vacuum: " 
+du -sh "$db"
