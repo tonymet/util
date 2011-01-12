@@ -1,0 +1,7 @@
+#!/usr/bin/python
+from statlib import stats
+import sys
+records = list()
+for l in sys.stdin.xreadlines():
+	records.append(float(l))
+print "Mean: %s, Std. Dev: %s\n" % (stats.mean(records), stats.stdev(records))
