@@ -1,6 +1,5 @@
 # makefile for util
 # $Id$
-include ../rules.in
 DESTDIR=$(HOME)/local/bin
 tname=$*
 install:: install-workspace-archive install-findext install-findfile install-vacuum-mail
