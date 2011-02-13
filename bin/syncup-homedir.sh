@@ -2,11 +2,15 @@
 # backup homedir using rsync
 RSYNC_OPTS="-zrltgoDP --modify-window=60"
 RSYNC_CONF="$HOME/rsync-thumb.conf"
-VERSION=1.1
-while getopts "n" OPTION
+# default to delete
+OPT_DELETE=1
+VERSION=1.3
+while getopts "dnk" OPTION
 do
 case $OPTION in
 	n) OPT_DRYRUN=1;;
+	d) OPT_SYNCDOWN=1;;
+	k) OPT_DELETE=0;;
 esac
 done
 
@@ -14,7 +18,12 @@ if [[ $OPT_DRYRUN -eq 1 ]];then
 	RSYNC_OPTS="$RSYNC_OPTS -n"
 	echo "DRY RUN ENABLED"
 fi
-RSYNC_COMMAND="rsync --exclude-from=$RSYNC_CONF $RSYNC_OPTS --delete --include core"
+if [[ $OPT_DELETE -eq 1 ]];then
+	RSYNC_OPTS="$RSYNC_OPTS --delete"
+else
+	echo "KEEP MISSING FILES ENABLED"
+fi
+RSYNC_COMMAND="rsync --exclude-from=$RSYNC_CONF $RSYNC_OPTS --include core"
 if [[ `uname -s` == 'Darwin' ]]; then
 	DEST_DRIVE="/Volumes/THUMB"
 elif [[ `uname -s` == 'Cygwin' ]]; then
@@ -30,4 +39,11 @@ if [[ ! -d "$DEST_DIR" ]]; then
 	exit 1
 fi
 echo "syncing up $HOME to $DEST_DIR"
+if [[ $OPT_SYNCDOWN -eq 1 ]]; then
+	echo "SYNCDOWN ENABLED"
+	echo "syncing from $DEST_DIR to $HOME/"
+	# rsync from drive to this computer
+	$RSYNC_COMMAND $DEST_DIR/ $HOME
+	exit $?
+fi
 $RSYNC_COMMAND $HOME/  $DEST_DIR

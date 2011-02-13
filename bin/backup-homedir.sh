@@ -1,12 +1,12 @@
 #!/bin/bash
 # backup homedir using rsync
-RSYNC_OPTS="-zrltgoDP"
+RSYNC_OPTS="-zrltgoDP --modify-window=60"
 RSYNC_CONF="$HOME/rsync.conf"
 if [[ $1 == "-n" ]]; then
 	OPT_DRYRUN=1
 fi
 if [[ $OPT_DRYRUN -eq 1 ]];then
-	RSYNC_OPTS="$RSYNC_OPTS"n
+	RSYNC_OPTS="$RSYNC_OPTS -n"
 	echo "DRY RUN ENABLED"
 fi
 RSYNC_COMMAND="rsync --exclude-from=$RSYNC_CONF $RSYNC_OPTS --delete --include core"
@@ -27,4 +27,5 @@ if [[ ! -d "$DEST_DIR" ]]; then
 		exit 1
 	fi
 fi
+echo "Backing up $HOME to $DEST_DIR"
 $RSYNC_COMMAND $HOME/  $DEST_DIR
