@@ -5,12 +5,23 @@ RSYNC_CONF="$HOME/rsync-thumb.conf"
 # default to delete
 OPT_DELETE=1
 VERSION=1.3
-while getopts "dnk" OPTION
+usage(){
+	echo "$0 version $VERSION"
+	echo "$0 [options]"
+	echo "options:"
+	echo "    -k do not delete"
+	echo "    -n dry run"
+	echo "    -d reverse sync (down)"
+	exit 1
+}
+
+while getopts "dnkh" OPTION
 do
 case $OPTION in
 	n) OPT_DRYRUN=1;;
 	d) OPT_SYNCDOWN=1;;
 	k) OPT_DELETE=0;;
+	h) usage;
 esac
 done
 
