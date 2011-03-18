@@ -1,6 +1,27 @@
 #!/bin/bash
 RSYNC_OPTS="-zrltgoCD"
-if [[ $1 == "-n" ]];then
+function usage(){
+	echo "$0 [-n -h -v]"
+	echo "OPTIONS"
+	echo "   -h help message"
+	echo "   -n -- dry run"
+	echo "   -v -- display version"
+}
+
+while getopts  "nhv" flag
+do
+	case $flag in
+		h)
+			usage;
+			exit 1;;
+		n)
+			OPT_DRYRUN=1;;
+		v)
+			echo $0 VERSION $VERSION;
+			exit 0;;
+	esac
+done
+if [[ $OPT_DRYRUN -eq 1 ]];then
 	RSYNC_OPTS="$RSYNC_OPTS"nP
 	echo "DRY RUN ENABLED"
 fi

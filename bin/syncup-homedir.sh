@@ -1,10 +1,10 @@
 #!/bin/bash
-# backup homedir using rsync
+# syncup homedir to THUMB current dir
 RSYNC_OPTS="-zrltgoDP --modify-window=60"
 RSYNC_CONF="$HOME/rsync-thumb.conf"
 # default to delete
 OPT_DELETE=1
-VERSION=1.3
+VERSION=1.4
 usage(){
 	echo "$0 version $VERSION"
 	echo "$0 [options]"
@@ -12,17 +12,23 @@ usage(){
 	echo "    -k do not delete"
 	echo "    -n dry run"
 	echo "    -d reverse sync (down)"
+	echo "    -v display version"
 	exit 1
 }
 
-while getopts "dnkh" OPTION
+while getopts "dnkhv" OPTION
 do
-case $OPTION in
-	n) OPT_DRYRUN=1;;
-	d) OPT_SYNCDOWN=1;;
-	k) OPT_DELETE=0;;
-	h) usage;
-esac
+	case $OPTION in
+		n) OPT_DRYRUN=1;;
+		d) OPT_SYNCDOWN=1;;
+		k) OPT_DELETE=0;;
+		h)
+			usage;
+			exit 1;;
+		v)
+			echo "$0 VERSION $VERSION";
+			exit 0;;
+	esac
 done
 
 if [[ $OPT_DRYRUN -eq 1 ]];then

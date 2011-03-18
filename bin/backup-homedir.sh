@@ -2,10 +2,28 @@
 # backup homedir using rsync
 RSYNC_OPTS="-zrltgoDP --modify-window=60"
 RSYNC_CONF="$HOME/rsync.conf"
-VERSION=1.2
-if [[ $1 == "-n" ]]; then
-	OPT_DRYRUN=1
-fi
+VERSION=1.3
+function usage(){
+	echo "$0 [-n -h -v]"
+	echo "OPTIONS"
+	echo "   -h help message"
+	echo "   -n -- dry run"
+	echo "   -v -- display version"
+}
+
+while getopts  "nhv" flag
+do
+	case $flag in
+		h)
+			usage;
+			exit 1;;
+		n)
+			OPT_DRYRUN=1;;
+		v)
+			echo $0 VERSION $VERSION;
+			exit 0;;
+	esac
+done
 if [[ $OPT_DRYRUN -eq 1 ]];then
 	RSYNC_OPTS="$RSYNC_OPTS -n"
 	echo "DRY RUN ENABLED"
