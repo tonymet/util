@@ -2,6 +2,7 @@
 # backup homedir using rsync
 RSYNC_OPTS="-zrltgoDP --modify-window=60"
 RSYNC_CONF="$HOME/rsync.conf"
+VERSION=1.2
 if [[ $1 == "-n" ]]; then
 	OPT_DRYRUN=1
 fi
