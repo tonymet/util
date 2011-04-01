@@ -6,7 +6,7 @@
 #  rm -rf sandbox
 #  svn co project ./sandbox
 #  tar -xf goodfiles.tar -C ./sandbox
-VERSION=1.1
+VERSION=1.2
 function usage(){
 	echo USAGE:
 	echo "    $0 [-n] archive_filename"
@@ -33,5 +33,10 @@ if [[ -z $1 ]]; then
 	usage
 	exit 1
 fi
-
+if [[ $OPT_DRYRUN -eq 1 ]]; then
+	echo "DRY RUN"
+	echo "KEEPING FILES:"
+	svn status |egrep '^M|^ M|^\?' | awk '{print $2}'
+	exit 0
+fi
 svn status |egrep '^M|^ M|^\?' | awk '{print $2}' |xargs tar -cf $1
