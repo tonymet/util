@@ -2,7 +2,7 @@
 # $Id$
 DESTDIR=$(HOME)/local/bin
 tname=$*
-install:: install-workspace-archive install-findext install-findfile install-vacuum-mail
+install:: install-workspace-archive install-findext install-findfile install-vacuum-mail install-workspace-syncup install-backup-homedir install-syncup-homedir
 install-findext::
 	install "bin/findext.pl" $(DESTDIR)/findext
 install-%-pl::
