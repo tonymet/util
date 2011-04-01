@@ -1,5 +1,12 @@
 #!/bin/bash
-VERSION=1.0
+# preserve modified/unknown files from sandbox into a tar archive
+# e.g.
+#  $ keepfiles ../goodfiles.tar
+#  $ cd ..
+#  rm -rf sandbox
+#  svn co project ./sandbox
+#  tar -xf goodfiles.tar -C ./sandbox
+VERSION=1.1
 function usage(){
 	echo USAGE:
 	echo "    $0 [-n] archive_filename"
