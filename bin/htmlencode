@@ -1,0 +1,5 @@
+#!/usr/bin/php
+<?php
+print htmlentities(fread(fopen('php://stdin', 'r'), 0xFFFF));
+
+?>
