@@ -7,7 +7,7 @@ if test ! -f "$db"  ;then
 	echo "$db doesn't exist"
 	exit 255;
 fi
-if ps -A -U tonym|grep -c 'Mail\.app' >/dev/null; then
+if ps -A -U $USER|grep -c 'Mail\.app' >/dev/null; then
 	echo "Mail.app is running.  Exit first before running $0";
 	exit 255
 fi

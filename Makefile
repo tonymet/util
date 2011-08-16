@@ -16,4 +16,4 @@ install-ytwiki_proxy:
 	install "bin/ytwiki_proxy.sh" /usr/local/bin/ytwiki_proxy
 
 install-urlutil:
-	install "bin/urldecode" bin/urlencode ~/local/bin/
+	install "bin/urldecode" bin/urlencode bin/htmlencode ~/local/bin/
