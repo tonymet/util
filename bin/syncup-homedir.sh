@@ -4,7 +4,7 @@ RSYNC_OPTS="-zrltgoDP --modify-window=60"
 RSYNC_CONF="$HOME/rsync-thumb.conf"
 # default to delete
 OPT_DELETE=1
-VERSION=1.4
+VERSION=1.5
 usage(){
 	echo "$0 version $VERSION"
 	echo "$0 [options]"
@@ -16,7 +16,7 @@ usage(){
 	exit 1
 }
 
-while getopts "dnkhv" OPTION
+while getopts "dnkhvt:" OPTION
 do
 	case $OPTION in
 		n) OPT_DRYRUN=1;;
@@ -25,6 +25,7 @@ do
 		h)
 			usage;
 			exit 1;;
+		t) OPT_TARGET="$OPTARG";;
 		v)
 			echo "$0 VERSION $VERSION";
 			exit 0;;
@@ -46,11 +47,15 @@ if [[ `uname -s` == 'Darwin' ]]; then
 elif [[ `uname -s` == 'Cygwin' ]]; then
 	DEST_DRIVE="/cygdrive/e/"
 fi
-if [[ ! -d "$DEST_DRIVE" ]]; then
-	echo "ERROR: $DEST_DRIVE is not a dir"
-	exit 1;
-fi
+#if [[ ! -d "$DEST_DRIVE" ]]; then
+#	echo "ERROR: $DEST_DRIVE is not a dir"
+#	exit 1;
+#fi
 DEST_DIR="$DEST_DRIVE/current/"
+# set DEST_DIR to OPT_TARGET if given
+if [[ ! -z $OPT_TARGET ]]; then
+	DEST_DIR="$OPT_TARGET"
+fi
 if [[ ! -d "$DEST_DIR" ]]; then
 	echo "ERROR: $DIST_DIR doesn't exist"
 	exit 1
