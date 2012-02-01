@@ -1,14 +1,16 @@
 #!/bin/bash
 RSYNC_OPTS="-zrltgoCD"
+VERSION="1.3"
 function usage(){
 	echo "$0 [-n -h -v]"
 	echo "OPTIONS"
 	echo "   -h help message"
+	echo "   -t target host"
 	echo "   -n -- dry run"
 	echo "   -v -- display version"
 }
 
-while getopts  "nhv" flag
+while getopts  "nhvt:" flag
 do
 	case $flag in
 		h)
@@ -19,6 +21,8 @@ do
 		v)
 			echo $0 VERSION $VERSION;
 			exit 0;;
+		t)  OPT_REMOTE_HOST=$OPTARG;;
+
 	esac
 done
 if [[ $OPT_DRYRUN -eq 1 ]];then
@@ -31,7 +35,10 @@ if [[ -f rsync.conf ]]; then
 	RSYNC_COMMAND="rsync $RSYNC_OPTS --exclude-from=rsync.conf --delete --include core"
 	echo "excluding files using rsync.conf"
 fi
-REMOTE_HOST=$zdev1
+REMOTE_HOST=$zdev3
+if [[ ! -z "$OPT_REMOTE_HOST" ]]; then
+	REMOTE_HOST="$OPT_REMOTE_HOST"
+fi
 echo "syncing files to $REMOTE_HOST"
 WORKSPACE=\~/workspace
 PROJECT=`basename $(pwd)`

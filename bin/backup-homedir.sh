@@ -2,7 +2,7 @@
 # backup homedir using rsync
 RSYNC_OPTS="-zrltgoDP --modify-window=60"
 RSYNC_CONF="$HOME/rsync.conf"
-VERSION=1.3
+VERSION=1.4
 function usage(){
 	echo "$0 [-n -h -v]"
 	echo "OPTIONS"
@@ -30,7 +30,7 @@ if [[ $OPT_DRYRUN -eq 1 ]];then
 fi
 RSYNC_COMMAND="rsync --exclude-from=$RSYNC_CONF $RSYNC_OPTS --delete --include core"
 if [[ `uname -s` == 'Darwin' ]]; then
-	DEST_DRIVE="/Volumes/THUMB"
+	DEST_DRIVE="/Volumes/My Passport"
 elif [[ `uname -s` == 'Cygwin' ]]; then
 	DEST_DRIVE="/cygdrive/e/"
 fi
