@@ -2,16 +2,17 @@
 # backup homedir using rsync
 RSYNC_OPTS="-zrltgoDP --modify-window=60"
 RSYNC_CONF="$HOME/rsync.conf"
-VERSION=1.4
+VERSION=1.5
 function usage(){
 	echo "$0 [-n -h -v]"
 	echo "OPTIONS"
 	echo "   -h help message"
 	echo "   -n -- dry run"
 	echo "   -v -- display version"
+	echo "   -m -- use rsync-media.conf"
 }
 
-while getopts  "nhv" flag
+while getopts  "nhvm" flag
 do
 	case $flag in
 		h)
@@ -22,11 +23,15 @@ do
 		v)
 			echo $0 VERSION $VERSION;
 			exit 0;;
+		m) OPT_MEDIA=1;;
 	esac
 done
 if [[ $OPT_DRYRUN -eq 1 ]];then
 	RSYNC_OPTS="$RSYNC_OPTS -n"
 	echo "DRY RUN ENABLED"
+fi
+if [[ $OPT_MEDIA -eq 1 ]];then
+	RSYNC_CONF="$HOME/rsync-media.conf"
 fi
 RSYNC_COMMAND="rsync --exclude-from=$RSYNC_CONF $RSYNC_OPTS --delete --include core"
 if [[ `uname -s` == 'Darwin' ]]; then
@@ -47,4 +52,4 @@ if [[ ! -d "$DEST_DIR" ]]; then
 	fi
 fi
 echo "Backing up $HOME to $DEST_DIR"
-$RSYNC_COMMAND $HOME/  $DEST_DIR
+$RSYNC_COMMAND "$HOME/"  "$DEST_DIR"
