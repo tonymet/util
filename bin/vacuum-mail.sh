@@ -1,8 +1,7 @@
 #!/bin/bash
 SQLITE=/usr/bin/sqlite3
 db="$HOME/Library/Mail/Envelope Index"
-echo -n "Index size before vacuum: " 
-VERSION=1.1
+VERSION=1.2
 OPT_DRYRUN=0
 OPT_SKYPE=0
 function check_running_app(){
@@ -41,24 +40,31 @@ if [[ $OPT_FILENAME ]]; then
 	db="$OPT_FILENAME"
 fi
 if [[ $OPT_SKYPE -eq 1 ]]; then
-	db=`find ~/Library/Application\ Support/Skype/ -iname main.db | head -n 1`
+	db=`find ~/Library/Application\ Support/Skype/ -iname main.db`
 fi
+#echo "$db"
+#exit
 echo "Version $VERSION"
-du -sh "$db"
-if test ! -f "$db"  ;then
-	echo "$db doesn't exist"
-	exit 255;
-fi
 if [[ $OPT_SKYPE -eq 1 ]]; then
 	check_running_app "Skype\.app"
 else
 	# test Mail.app by default
 	check_running_app "Mail\.app"
 fi
-echo 'getting tables'
-tables=`$SQLITE  "$db" .tables`
-echo "Preparing to vacuum $tables"
+# set IFS to \n to allow spaces
+IFS=$'\n'
 for dbfile in $db; do
+	echo -n "Index size before vacuum: "
+	du -sh "$dbfile"
+	if test ! -f "$dbfile"  ;then
+		echo "$dbfile doesn't exist"
+		exit 255;
+	fi
+	echo 'getting tables'
+	tables=`$SQLITE  "$dbfile" .tables`
+	echo "Preparing to vacuum $tables"
+	# default IFS
+	unset IFS
 	for t in $tables;do
 		echo "Vacuuming $t..."
 		if [[ $OPT_DRYRUN -eq 0 ]]; then
@@ -68,6 +74,8 @@ for dbfile in $db; do
 		fi
 		echo "Done"
 	done
+	echo -n "Index size after vacuum: "
+	du -sh "$dbfile"
+	# quirky IFS for loop
+	IFS=$'\n'
 done
-echo -n "Index size after vacuum: " 
-du -sh "$db"
