@@ -42,8 +42,6 @@ fi
 if [[ $OPT_SKYPE -eq 1 ]]; then
 	db=`find ~/Library/Application\ Support/Skype/ -iname main.db`
 fi
-#echo "$db"
-#exit
 echo "Version $VERSION"
 if [[ $OPT_SKYPE -eq 1 ]]; then
 	check_running_app "Skype\.app"
