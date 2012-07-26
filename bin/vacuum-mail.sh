@@ -6,7 +6,7 @@ VERSION=1.1
 OPT_DRYRUN=0
 OPT_SKYPE=0
 function check_running_app(){
-	if ps -A -U $USER|fgrep -c "$1" >/dev/null; then
+	if ps -A -U $USER|grep -c "$1" >/dev/null; then
 		echo "$1 is running.  Exit first before running $0";
 		exit 255
 	fi
@@ -50,22 +50,24 @@ if test ! -f "$db"  ;then
 	exit 255;
 fi
 if [[ $OPT_SKYPE -eq 1 ]]; then
-	check_running_app "Skype.app"
+	check_running_app "Skype\.app"
 else
 	# test Mail.app by default
-	check_running_app "Mail.app"
+	check_running_app "Mail\.app"
 fi
 echo 'getting tables'
 tables=`$SQLITE  "$db" .tables`
 echo "Preparing to vacuum $tables"
-for t in $tables;do
-	echo "Vacuuming $t..."
-	if [[ $OPT_DRYRUN -eq 0 ]]; then
-		$SQLITE "$db" "vacuum $t"
-	else
-		echo $SQLITE "$db" "vacuum $t"
-	fi
-	echo "Done"
+for dbfile in $db; do
+	for t in $tables;do
+		echo "Vacuuming $t..."
+		if [[ $OPT_DRYRUN -eq 0 ]]; then
+			$SQLITE "$dbfile" "vacuum $t"
+		else
+			echo $SQLITE "$dbfile" "vacuum $t"
+		fi
+		echo "Done"
+	done
 done
 echo -n "Index size after vacuum: " 
 du -sh "$db"
