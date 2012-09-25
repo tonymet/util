@@ -1,12 +1,44 @@
 #!/bin/bash
-if [[ -d $1 && -d $2 ]]; then
-	dest="$2/`basename $1`.tgz"
-	echo "Archiving $1 to $dest"
-	tar -czf "$dest" $1
-	if [[ $? -eq 0 ]]; then
-		echo "removing $1"
-		rm -rf $1;
+VERSION=1.3
+function usage(){
+	echo "$0 [-n -h] SANDBOX ARCHIVE_DIR "
+	echo "OPTIONS"
+	echo "   -h help message"
+	echo "   -n -- dry run"
+	echo "   -v -- display version"
+	echo "   -m -- use rsync-media.conf"
+}
+
+while getopts  "nhv" flag
+do
+	case $flag in
+		h)
+			usage;
+			exit 1;;
+		n)
+			OPT_DRYRUN=1;;
+		v)
+			echo $0 VERSION $VERSION;
+			exit 0;;
+		m) OPT_MEDIA=1;;
+	esac
+done
+# some clumsy dereferencing to get the trailing arguments
+source=`eval "expr \"\\$$OPTIND\""`
+destind=$((OPTIND + 1))
+destdir=`eval "expr \"\\$$destind\""`
+if [[ -d $source && -d $destdir ]]; then
+	dest="$destdir/`basename $source`.tgz"
+	echo "Archiving $source to $dest"
+	if [[ $OPT_DRYRUN -eq 1 ]];then
+		echo tar -czf "$dest" $source
+	else
+		tar -czf "$dest" $source
+		if [[ $? -eq 0 ]]; then
+			echo "removing $source"
+			rm -rf $source;
+		fi
 	fi
 else
-	echo "Dir $1 or $2 does not exist";
+	echo "Dir $source or $destdir does not exist";
 fi

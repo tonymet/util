@@ -1,7 +1,7 @@
 #!/bin/bash
 SQLITE=/usr/bin/sqlite3
 db="$HOME/Library/Mail/Envelope Index"
-VERSION=1.2
+VERSION=1.3
 OPT_DRYRUN=0
 OPT_SKYPE=0
 function check_running_app(){
@@ -22,7 +22,7 @@ usage(){
 	exit 1
 }
 
-while getopts "snf:" OPTION
+while getopts "vhsnf:" OPTION
 do
 	case $OPTION in
 		f) OPT_FILENAME="$OPTARG";;
