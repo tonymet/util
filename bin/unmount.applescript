@@ -6,5 +6,7 @@ on error
 end try
 -- quit chrome because it stalls sleep
 tell application "Google Chrome" to quit
+-- quick GDrive because it wastes battery
+tell application "Google Drive" to quit
 -- unload mds to save battery
 do shell script "sudo launchctl unload /System/Library/LaunchDaemons/com.apple.metadata.mds.plist"
