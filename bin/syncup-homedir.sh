@@ -4,7 +4,7 @@ RSYNC_OPTS="-zrltgoDP --modify-window=60"
 RSYNC_CONF="$HOME/rsync-thumb.conf"
 # default to delete
 OPT_DELETE=1
-VERSION=1.5
+VERSION=1.6
 usage(){
 	echo "$0 version $VERSION"
 	echo "$0 [options]"
@@ -13,6 +13,7 @@ usage(){
 	echo "    -n dry run"
 	echo "    -d reverse sync (down)"
 	echo "    -v display version"
+	echo "    -t target directory"
 	exit 1
 }
 
@@ -65,7 +66,7 @@ if [[ $OPT_SYNCDOWN -eq 1 ]]; then
 	echo "SYNCDOWN ENABLED"
 	echo "syncing from $DEST_DIR to $HOME/"
 	# rsync from drive to this computer
-	$RSYNC_COMMAND $DEST_DIR/ $HOME
+	$RSYNC_COMMAND "$DEST_DIR/" "$HOME"
 	exit $?
 fi
-$RSYNC_COMMAND $HOME/  $DEST_DIR
+$RSYNC_COMMAND "$HOME/"  "$DEST_DIR"
