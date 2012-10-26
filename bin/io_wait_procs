@@ -1,1 +1,3 @@
+#!/bin/bash
+# display proces in io-wait/uninterruptible sleep
 ps -eo ppid,pid,user,stat,pcpu,comm,wchan:32|grep D

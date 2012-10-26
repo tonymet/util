@@ -1,3 +1,5 @@
+#!/bin/bash
+# top-10 highest # of open files
 if [[ $UID -ne 0 ]]; then
 	echo "ERROR: this cmd should be run as root. otherwise you'll see incomplete results";
 fi
