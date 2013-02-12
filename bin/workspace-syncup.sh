@@ -1,6 +1,6 @@
 #!/bin/bash
-RSYNC_OPTS="-zrltgoCD"
-VERSION="1.3"
+RSYNC_OPTS="-zrltgoCD --delete"
+VERSION="1.5"
 function usage(){
 	echo "$0 [-n -h -v]"
 	echo "OPTIONS"
@@ -8,9 +8,10 @@ function usage(){
 	echo "   -t target host"
 	echo "   -n -- dry run"
 	echo "   -v -- display version"
+	echo "   -s -- do not delete target files"
 }
 
-while getopts  "nhvt:" flag
+while getopts  "nshvt:" flag
 do
 	case $flag in
 		h)
@@ -22,14 +23,14 @@ do
 			echo $0 VERSION $VERSION;
 			exit 0;;
 		t)  OPT_REMOTE_HOST=$OPTARG;;
-
+		s)  RSYNC_OPTS="-zrltgoCD";;
 	esac
 done
 if [[ $OPT_DRYRUN -eq 1 ]];then
 	RSYNC_OPTS="$RSYNC_OPTS"nP
 	echo "DRY RUN ENABLED"
 fi
-RSYNC_COMMAND="rsync $RSYNC_OPTS --delete --include core"
+RSYNC_COMMAND="rsync $RSYNC_OPTS"
 # recognize a rsync.conf in the current directory
 if [[ -f rsync.conf ]]; then
 	RSYNC_COMMAND="rsync $RSYNC_OPTS --exclude-from=rsync.conf --delete --include core"

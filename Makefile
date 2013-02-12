@@ -10,7 +10,7 @@ install-%-pl::
 
 # wildcard for everything else
 install-%:
-	install "bin/$(tname).sh" $(DESTDIR)/$(tname)
+	install "bin/$(tname).sh" "$(DESTDIR)/$(tname)"
 
 install-ytwiki_proxy:
 	install "bin/ytwiki_proxy.sh" /usr/local/bin/ytwiki_proxy
