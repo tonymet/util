@@ -1,4 +1,5 @@
 #!/bin/bash
+VERSION=1.1
 root="$HOME/Documents/workspace/zla/"
 if [[ ! -d $root ]];then
 	echo "$root not found"
@@ -24,11 +25,14 @@ if [[ $branch_no -lt 0 || $branch_no -gt ${#branches[@]} ]]; then
 fi
 branch_basename="${branches[$branch_no]}"
 
-if [[ -h 'development' ]];then
+if [[ -h "$root/development" ]];then
 	if ! rm -f "$root/development"; then
 		echo "ERROR removing current development symlink";
 		exit 2;
 	fi
+else
+	echo "ERROR: \"development\" is not a symlink";
+	exit 2;
 fi
 if ! ln -s "$root/branches/$branch_basename" "$root/development"; then
 	echo "ERROR linking $root/branches/$branch_basename" to "$root/development"
